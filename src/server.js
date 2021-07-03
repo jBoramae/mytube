@@ -1,6 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import globalRouter from "./routers/globalRouter";
+import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 // node module에서 express를 찾아냄.
@@ -22,7 +22,7 @@ app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 // express app이 form의 value들을 이해할 수 있도록 하고, JS 형식으로 변형시켜줌.
 
-app.use("/", globalRouter);
+app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
 // "/"로 시작하는 url에 접근하면 콜백 라우터에 있는 컨트롤러를 찾게 함.
