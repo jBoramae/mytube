@@ -1,5 +1,5 @@
 import Mongoose from "mongoose";
-import bcrpyt from "bcrypt";
+import bcrypt from "bcrypt";
 
 const userSchema = new Mongoose.Schema({
    email: { type: String, required: true, unique: true },
