@@ -1,8 +1,10 @@
 import express from "express";
 import morgan from "morgan";
+import session from "express-session";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import { localsMiddleware } from "./middlewares";
 // node module에서 express를 찾아냄.
 // === const express = require("express");
 
@@ -22,6 +24,31 @@ app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 // express app이 form의 value들을 이해할 수 있도록 하고, JS 형식으로 변형시켜줌.
 
+app.use(
+   session({
+      secret: "Hello!",
+      resave: true,
+      saveUninitialized: true,
+   })
+);
+// express에서 세션을 사용하기 위한 middleware. 라우터 이전에 써야함.
+// 'secret'이란 기억하기 위한 텍스트.
+
+/*
+app.use((req, res, next) => {
+   req.sessionStore.all((error, sessions) => {
+      console.log(sessions);
+      next();
+   });
+});
+
+app.get("/add-one", (req, res, next) => {
+   req.session.count += 1;
+   return res.send(`${req.session.id}\n${req.session.count}`);
+});
+*/
+
+app.use(localsMiddleware);
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);

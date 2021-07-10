@@ -68,7 +68,10 @@ export const postLogin = async (req, res) => {
       });
    }
 
-   console.log("LOG USER IN! COMING SOON!");
+   req.session.loggedIn = true;
+   // 세션의 로그인 상태 속성을 true로 만드는 부분?
+   req.session.user = user;
+   // req.session의 user <= DB에서 찾은 user로 세션에 정보를 추가.
    return res.redirect("/");
 };
 export const edit = (req, res) => res.send("Edit User");
