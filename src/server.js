@@ -1,10 +1,12 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import { localsMiddleware } from "./middlewares";
+import { Mongoose } from "mongoose";
 // node module에서 express를 찾아냄.
 // === const express = require("express");
 
@@ -26,13 +28,19 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
    session({
-      secret: "Hello!",
-      resave: true,
-      saveUninitialized: true,
+      secret: process.env.COOKIE_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+         mongoUrl: process.env.DB_URL,
+      }),
    })
 );
 // express에서 세션을 사용하기 위한 middleware. 라우터 이전에 써야함.
 // 'secret'이란 기억하기 위한 텍스트.
+// saveUninitialized: false => initialize 되어야 쿠키 생성, 즉 backend가 로그인 사용자에게만 쿠키 허용.
+// token authentication 을 통해서도 해결 가능함. ex) iOS, Android app.
+// store : MongoStore.create({}) 부분을 지우면 세션이 서버의 메모리에 저장됨.
 
 /*
 app.use((req, res, next) => {
