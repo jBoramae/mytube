@@ -57,6 +57,9 @@ app.get("/add-one", (req, res, next) => {
 */
 
 app.use(localsMiddleware);
+app.use("/uploads", express.static("uploads"));
+app.use("/assets", express.static("assets"));
+// app.use("경로명", express.static("폴더명"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
