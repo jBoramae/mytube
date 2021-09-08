@@ -302,7 +302,8 @@ export const see = async (req, res) => {
          model: "User",
       },
    });
-   // Double populate: 내가 유저를 DB에서 받고, 그리고 그 유저가 업로드한 비디오를 받음.
+   // Double populate: 내가 유저를 DB에서 받고,
+   // 그리고 그 유저가 업로드한 비디오를 받음.
    // 그리고 mixin 형태대문에 그 비디오의 creator를 받음.
 
    if (!user) {
