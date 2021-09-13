@@ -141,11 +141,20 @@ const handleKeyDown = (event) => {
    }
 };
 
+const handleEnded = () => {
+   const { id } = videoContainer.dataset;
+   fetch(`/api/videos/${id}/view`, {
+      method: "POST",
+   });
+   // 기본적으로 fetch의 default method == "GET"
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange);
-video.addEventListener("loadeddata", handleLoadedMetadata);
+video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("ended", handleEnded);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
 videoContainer.addEventListener("mousemove", handleMouseMove);

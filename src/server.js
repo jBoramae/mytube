@@ -6,7 +6,7 @@ import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import { localsMiddleware } from "./middlewares";
-import { Mongoose } from "mongoose";
+import apiRouter from "./routers/apiRouter";
 // node module에서 express를 찾아냄.
 // === const express = require("express");
 
@@ -63,6 +63,7 @@ app.use("/assets", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
+app.use("/api", apiRouter);
 // "/"로 시작하는 url에 접근하면 콜백 라우터에 있는 컨트롤러를 찾게 함.
 
 // express app의 내용을 구성하고, app에게 get request에 응답하는 방법 등을 입력
