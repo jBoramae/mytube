@@ -10,7 +10,7 @@ import apiRouter from "./routers/apiRouter";
 // node module에서 express를 찾아냄.
 // === const express = require("express");
 
-console.log(process.cwd());
+// console.log(process.cwd());
 
 const app = express();
 const logger = morgan("dev");
