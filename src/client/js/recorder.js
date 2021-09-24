@@ -2,11 +2,24 @@ const startBtn = document.getElementById("startBtn");
 const video = document.getElementById("preview");
 
 let stream;
+let recorder;
+let videoFile;
+
+const handleDownload = () => {
+   const anc = document.createElement("a");
+   anc.href = videoFile;
+   anc.download = "MyRecording.webm";
+   document.body.appendChild(anc);
+   anc.click();
+   // a.click(): 사용자가 링크를 클릭한 것처럼 작동
+};
 
 const handleStop = () => {
-   startBtn.innerText = "Start Recording";
+   startBtn.innerText = "Download Recording";
    startBtn.removeEventListener("click", handleStop);
-   startBtn.addEventListener("click", handleStart);
+   startBtn.addEventListener("click", handleDownload);
+
+   recorder.stop();
 };
 
 const handleStart = () => {
@@ -14,24 +27,22 @@ const handleStart = () => {
    startBtn.removeEventListener("click", handleStart);
    startBtn.addEventListener("click", handleStop);
 
-   const recorder = new MediaRecorder(stream);
+   recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
 
-   recorder.ondataavailable = (e) => {
-      console.log("recoding done");
-      console.log(e);
-      console.log(e.data);
+   recorder.ondataavailable = (event) => {
+      videoFile = URL.createObjectURL(event.data);
+      video.srcObject = null;
+      video.src = videoFile;
+      video.loop = true;
+      video.play();
+      //createObjectURL: 브라우저 메모리에서만 가능한 URL 생성
    };
-   console.log(recorder);
    recorder.start();
-   console.log(recorder);
-   setTimeout(() => {
-      recorder.stop();
-   }, 10000);
 };
 
 const init = async () => {
    stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
+      audio: false,
       video: true,
    });
 
