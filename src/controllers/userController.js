@@ -175,7 +175,9 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-   req.session.destroy();
+   req.session.loggedIn = false;
+   // req.session.destroy();
+   req.flash("info", "Bye Bye!");
    return res.redirect("/");
 };
 
@@ -253,6 +255,7 @@ export const postEdit = async (req, res) => {
 
 export const getChangePassword = (req, res) => {
    if (req.session.user.socialOnly === true) {
+      req.flash("error", "Can't change password.");
       return res.redirect("/");
       // form을 보여주지만, 사용할 수 없게 할 수도 있음 => 비밀번호가 있어야만 변경가능케
    }
@@ -287,6 +290,7 @@ export const postChangePassword = async (req, res) => {
 
    user.password = newPassword;
    await user.save();
+   req.flash("info", "Password updated!");
    // DB에 저장하는 데 시간이 걸림 => user.save();는 promise? => await
    // user.save(); => userSchema.pre("save", ) Middleware가 작동함.
 

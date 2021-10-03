@@ -45,6 +45,7 @@ const init = async () => {
       audio: false,
       video: true,
    });
+   // stream: 어딘가에 넣어둘 0과 1로 이뤄진 데이터
 
    video.srcObject = stream;
    video.play();

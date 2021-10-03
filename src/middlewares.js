@@ -9,7 +9,7 @@ export const localsMiddleware = (req, res, next) => {
    res.locals.loggedIn = Boolean(req.session.loggedIn);
    res.locals.siteName = "Mytube";
    res.locals.loggedInUser = req.session.user || {};
-   // req.session.user || {} => or와 빈 오브젝트를 통해 undefinded일때의 에러 해결
+   // req.session.user || {} => or와 빈 오브젝트를 통해 undefined일때의 에러 해결
 
    // console.log(req.session.user);
    // console.log(res.locals);
@@ -21,6 +21,7 @@ export const protectorMiddleware = (req, res, next) => {
    if (req.session.loggedIn) {
       return next();
    } else {
+      req.flash("error", "Log-in first.");
       return res.redirect("/login");
    }
 };
@@ -29,6 +30,8 @@ export const publicOnlyMiddleware = (req, res, next) => {
    if (!req.session.loggedIn) {
       return next();
    } else {
+      req.flash("error", "Not authorized.");
+      // req.flash(타입, 메시지)
       return res.redirect("/");
    }
 };

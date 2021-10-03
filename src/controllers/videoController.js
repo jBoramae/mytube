@@ -55,6 +55,7 @@ export const getEdit = async (req, res) => {
    }
 
    if (String(video.owner) !== String(_id)) {
+      req.flash("error", "You're not the owner of the video.");
       return res.status(403).redirect("/");
       // status(403) === Forbidden
    }
@@ -85,6 +86,7 @@ export const postEdit = async (req, res) => {
       hashtags: Video.formatHashtags(hashtags),
    });
 
+   req.flash("Success", "Change saved.");
    return res.redirect(`/videos/${id}`);
 };
 /* 유저가 getEdit으로 이동, form을 render, 유저가 submit시 post.req로 이동,
@@ -172,6 +174,7 @@ export const search = async (req, res) => {
       videos = await Video.find({
          title: {
             $regex: new RegExp(keyword, "i"),
+            // MongoDB에서 지원하는 정규표현식 옵션. i: 대소문자 구분X.
          },
       }).populate("owner");
    }

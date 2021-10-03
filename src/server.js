@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
@@ -56,6 +57,8 @@ app.get("/add-one", (req, res, next) => {
 });
 */
 
+app.use(flash());
+// flash() 미들웨어를 설치한 순간부터 req.flash라는 함수 사용 가능
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
 app.use("/assets", express.static("assets"));

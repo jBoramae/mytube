@@ -19,7 +19,11 @@ block content
             div
                span#fullScreen 
                   i.fas.fa-expand
-
+   if loggedIn
+      div.video__comments
+         form.video__comment-form#commentForm
+            textarea(cols="30", rows="10", placeholder="Write a comment.. :D")
+            button Add Comment
 
 //-
    div
@@ -35,3 +39,4 @@ block content
 
 block scripts
    script(src="/assets/js/videoPlayer.js") 
+   script(src="/assets/js/commentSection.js") 
