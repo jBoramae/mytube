@@ -27,6 +27,13 @@ app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 // express app이 form의 value들을 이해할 수 있도록 하고, JS 형식으로 변형시켜줌.
 
+app.use(express.json());
+// string을 받아서 JS Object로 바꿔줌.
+// 이전에 request의 content-type을 바꿔줄 필요가 있음. => headers
+
+// 단순히 text 하나만 보내면 express.text()를 써도 무방
+// express.text(): It parses the incoming request payloads into a string and is based on body-parser.
+
 app.use(
    session({
       secret: process.env.COOKIE_SECRET,

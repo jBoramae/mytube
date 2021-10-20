@@ -19,13 +19,7 @@ block content
             div
                span#fullScreen 
                   i.fas.fa-expand
-   if loggedIn
-      div.video__comments
-         form.video__comment-form#commentForm
-            textarea(cols="30", rows="10", placeholder="Write a comment.. :D")
-            button Add Comment
 
-//-
    div
       p=video.description
       small=video.createdAt
@@ -37,6 +31,17 @@ block content
       br
       a(href=`${video.id}/delete`) Delete Video &rarr;
 
+   if loggedIn
+      div.video__comments
+         form.video__comment-form#commentForm
+            textarea(cols="30", rows="10", placeholder="Write a comment.. :D")
+            button Add Comment
+
 block scripts
    script(src="/assets/js/videoPlayer.js") 
-   script(src="/assets/js/commentSection.js") 
+   if loggedIn 
+      script(src="/assets/js/commentSection.js") 
+//- commentSection에서 if loggedIn 조건문을 달면,
+   querySelector에서 element 가져올 수 없게 되어 오류 발생
+   1) commentSection.js script에 if loggedIn 조건문
+   2)

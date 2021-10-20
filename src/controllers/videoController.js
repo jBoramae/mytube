@@ -1,5 +1,7 @@
 import Video from "../models/Video";
 import User from "../models/User";
+import Comment from "../models/Comment";
+import { async } from "regenerator-runtime";
 
 /* ===== Callback Style =====
    Video.find({}, (error, videos) => {
@@ -185,7 +187,6 @@ export const search = async (req, res) => {
 export const registerView = async (req, res) => {
    const { id } = req.params;
    const video = await Video.findById(id);
-
    if (!video) {
       return res.sendStatus(404);
    }
@@ -195,4 +196,33 @@ export const registerView = async (req, res) => {
 
    return res.sendStatus(200);
    // status code 200: Okay
+};
+
+export const createComment = async (req, res) => {
+   // cookie 덕분에 req.session.user를 불러올 수 있음.
+   const {
+      session: { user },
+      body: { text },
+      params: { id },
+   } = req;
+
+   const video = await Video.findById(id);
+   if (!video) {
+      return res.sendStatus(404);
+   }
+
+   const comment = await Comment.create({
+      text,
+      owner: user._id,
+      video: id,
+   });
+
+   /**
+    * Status Code
+    * 200: OK
+    * 201: Created, The req has been fulfilled, resulting in the creation of a new resource.
+    * 202: Accepted
+    *    ...
+    */
+   return res.sendStatus(201);
 };
