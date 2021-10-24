@@ -249,9 +249,6 @@ export const deleteComment = async (req, res) => {
    const video = await Video.findById(videoId);
    const commentOwner = await User.findById(user._id);
 
-   console.log("video.comments", video);
-   console.log("commentOwner.comments", commentOwner);
-
    if (String(commentOwner._id) === String(comment.owner)) {
       commentOwner.comments.splice(commentOwner.comments.indexOf(id), 1);
       video.comments.splice(video.comments.indexOf(id), 1);
