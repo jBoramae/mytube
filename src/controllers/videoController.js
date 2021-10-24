@@ -213,6 +213,8 @@ export const createComment = async (req, res) => {
       return res.sendStatus(404);
    }
 
+   const commentOwner = await User.findById(user._id);
+
    const comment = await Comment.create({
       text,
       owner: user._id,
@@ -220,7 +222,9 @@ export const createComment = async (req, res) => {
    });
 
    // video내 comments array에 새로 만들어진 comment의 id를 push해야 확인가능.
+   commentOwner.comments.push(comment._id);
    video.comments.push(comment._id);
+   commentOwner.save();
    video.save();
 
    /**
@@ -231,4 +235,32 @@ export const createComment = async (req, res) => {
     *    ...
     */
    return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const deleteComment = async (req, res) => {
+   const {
+      session: { user },
+      body: { videoId },
+      params: { id },
+   } = req;
+
+   const comment = await Comment.findById(id);
+
+   const video = await Video.findById(videoId);
+   const commentOwner = await User.findById(user._id);
+
+   console.log("video.comments", video);
+   console.log("commentOwner.comments", commentOwner);
+
+   if (String(commentOwner._id) === String(comment.owner)) {
+      commentOwner.comments.splice(commentOwner.comments.indexOf(id), 1);
+      video.comments.splice(video.comments.indexOf(id), 1);
+      video.save();
+      commentOwner.save();
+      await Comment.findByIdAndDelete(id);
+      return res.sendStatus(204);
+   } else {
+      req.flesh("Info", "Not authorized");
+      return res.sendStatus(403);
+   }
 };

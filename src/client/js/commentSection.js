@@ -1,12 +1,25 @@
 const videoContainor = document.getElementById("videoContainer");
 const form = document.getElementById("commentForm");
 
-const delComment = (arg) => {};
-
 const handleDelete = async (event) => {
    const comment = event.target.parentNode;
    const commentId = comment.dataset.id;
-   console.log(comment.dataset);
+   const videoId = videoContainor.dataset.id;
+   const response = await fetch(`/api/videos/${videoId}/comment/${commentId}`, {
+      method: "DELETE",
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ videoId }),
+   });
+   if (response.status === 204) {
+      const comments = document.querySelector(".video__comments ul");
+      comments.removeChild(comment);
+   } else {
+      alert("Not authorized.");
+   }
+   // videoId => String return
+   // JSON.stringify({ videoId }) => {"videoId" : "1234asdf"} 같은 json object return
 };
 
 const addComment = (text, id) => {
@@ -89,7 +102,6 @@ if (document.querySelector(".deleteBtn")) {
    for (let e of elem) {
       e.addEventListener("click", handleDelete);
    }
-   console.log(elem);
 }
 
 // form의 method나 action이 있기 때문에 btn-click event 감지 대신, form의 submit 감지.
